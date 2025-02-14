@@ -1,50 +1,33 @@
-# XxxCams.org Multi-Provider Platform
+# 999Leads Platform Deployment Guide
 
 ## Prerequisites
-- Node.js (v16+)
-- npm (v8+)
+- Docker
+- Docker Compose
+- Git
+- Domain (999leads.com)
 
-## Installation
-
-1. Clone the repository
+## Deployment Steps
+1. Clone Repository
 ```bash
-git clone https://github.com/yourusername/xxxcams-platform.git
-cd xxxcams-platform
+git clone https://github.com/pumpz999/999leads9.git
+cd 999leads9
 ```
 
-2. Install dependencies
+2. Run Deployment Script
 ```bash
-npm install
+chmod +x deployment/auto-deploy.sh
+./deployment/auto-deploy.sh
 ```
 
-3. Set up environment variables
-- Copy `.env.example` to `.env`
-- Fill in your API keys and configurations
+## Access Points
+- Website: https://999leads.com
+- Admin Panel: https://999leads.com/admin
+- API Docs: https://999leads.com/api/docs
+- Monitoring: https://999leads.com/monitoring
 
-## Running the Platform
-
-### Development Mode
-```bash
-npm run dev
-```
-
-### Production Build
-```bash
-npm run build
-npm start
-```
-
-## Features
-- Multi-Provider API Integration
-- Secure Authentication
-- Responsive Design
-- Admin Configuration Panel
-
-## Supported Providers
-- XloveCam
-- AWEmpire
-- LiveJasmin
-- Chaturbate
-
-## Contributing
-Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
+## Configuration Management
+Access the admin panel to configure:
+- API Providers
+- Deployment Settings
+- Security Configurations
+- Monitoring Dashboard

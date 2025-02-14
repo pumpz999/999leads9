@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # Frontend Service
+  frontend:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run build && npm start"
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+
+  # Backend API Service
+  backend:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    command: sh -c "npm install && npm run start:prod"
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "5000:5000"
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - frontend
+      - backend
+
+  # SSL Certificate Management
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email 999leadsolutions@gmail.com -d 999leads.com -d www.999leads.com --agree-tos
+
+  # Database Service
+  database:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secure_password
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+  # Monitoring Service
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  # Auto-Update Service
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30
+
+  # Admin Configuration Management
+  config-manager:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./config-manager:/app
+    command: sh -c "npm install && npm run start"
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "7000:7000"
+
+volumes:
+  mongodb_data:
