@@ -1,0 +1,16 @@
+# 999Leads Platform Automated Tasks
+
+# Clean Cache Every 10 Days
+0 0 */10 * * root /var/www/999leads/auto-maintenance.sh
+
+# Refresh Models Every 3 Minutes
+*/3 * * * * root node /var/www/999leads/scripts/model-refresh.js
+
+# Log Rotation Daily
+0 0 * * * root /usr/sbin/logrotate /etc/logrotate.conf
+
+# System Performance Optimization
+0 2 * * * root sysctl -w vm.drop_caches=3
+
+# Automated Security Updates
+0 4 * * 0 root unattended-upgrade -d

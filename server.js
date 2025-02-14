@@ -1,36 +1,36 @@
 const express = require('express');
-const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+const compression = require('compression');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(compression());
 app.use(helmet());
 app.use(express.json());
 
-// Rate Limiting
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use('/api/', apiLimiter);
-
-// API Routes
-app.get('/api/providers', (req, res) => {
-  res.json({
-    providers: [
-      'XloveCam',
-      'AWEmpire', 
-      'LiveJasmin', 
-      'Chaturbate'
-    ]
-  });
+// File-based "Database" Routes
+app.get('/api/models', (req, res) => {
+  try {
+    const models = JSON.parse(fs.readFileSync('./data/models.json'));
+    res.json(models);
+  } catch (error) {
+    res.status(500).json({ error: 'Could not fetch models' });
+  }
 });
 
-// Error Handling Middleware
+// Static File Serving
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all route for SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Error Handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
