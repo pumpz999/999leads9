@@ -1,21 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import AdminPanel from './pages/AdminPanel';
-import ModelList from './pages/ModelList';
-
-import './styles/HomePage.css';
-
-function App() {
+export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/models" element={<ModelList />} />
-      </Routes>
-    </Router>
-  );
+    <div>
+      <h1>XxxCams Platform</h1>
+      <p>Initial setup complete</p>
+    </div>
+  )
 }
-
-export default App;
